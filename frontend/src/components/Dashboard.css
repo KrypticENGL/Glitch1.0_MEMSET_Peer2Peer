@@ -148,6 +148,7 @@
   }
 }
 
+
 .add-flashcard-btn {
   background: linear-gradient(135deg, var(--gruvbox-green) 0%, var(--gruvbox-green-bright) 100%);
   color: var(--gruvbox-bg0);
@@ -311,7 +312,7 @@
   background-color: var(--md-sys-color-surface-variant);
   border-radius: var(--md-sys-shape-corner-small);
   font-size: 14px;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--gruvbox-bg0);
   font-style: italic;
 }
 

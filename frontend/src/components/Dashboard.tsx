@@ -366,6 +366,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
           onClose={() => setIsRapidFireOpen(false)}
         />
       )}
+
     </div>
   );
 };

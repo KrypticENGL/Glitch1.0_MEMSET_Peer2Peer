@@ -87,7 +87,7 @@
 
 .card-text {
   font-family: var(--md-sys-typescale-body-large-font);
-  font-size: var(--md-sys-typescale-body-large-size);
+  font-size: 20px;
   font-weight: var(--md-sys-typescale-body-large-weight);
   line-height: var(--md-sys-typescale-body-large-line-height);
   margin: 0;
@@ -166,6 +166,9 @@
   background-color: var(--gruvbox-bg0);
   color: var(--gruvbox-green);
   border: 1px solid var(--gruvbox-green);
+  padding: 6px 12px;
+  font-size: 12px;
+  min-width: 50px;
 }
 
 .review-btn:hover {
@@ -174,6 +177,7 @@
   box-shadow: var(--md-sys-elevation-level2);
   transform: translateY(-1px);
 }
+
 
 .edit-form {
   display: flex;
@@ -272,12 +276,12 @@
 }
 
 .revision-label {
-  color: var(--gruvbox-fg3);
+  color: var(--gruvbox-bg0);
   font-weight: 500;
 }
 
 .revision-date {
-  color: var(--gruvbox-fg1);
+  color: var(--gruvbox-bg0);
   font-weight: 600;
 }
 
