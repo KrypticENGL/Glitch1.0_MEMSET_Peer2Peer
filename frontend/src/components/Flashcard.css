@@ -162,6 +162,19 @@
   transform: translateY(-1px);
 }
 
+.review-btn {
+  background-color: var(--gruvbox-bg0);
+  color: var(--gruvbox-green);
+  border: 1px solid var(--gruvbox-green);
+}
+
+.review-btn:hover {
+  background-color: var(--gruvbox-green);
+  color: var(--gruvbox-bg0);
+  box-shadow: var(--md-sys-elevation-level2);
+  transform: translateY(-1px);
+}
+
 .edit-form {
   display: flex;
   flex-direction: column;
@@ -233,6 +246,47 @@
   background-color: var(--gruvbox-bg4);
   box-shadow: var(--md-sys-elevation-level2);
   transform: translateY(-1px);
+}
+
+/* Revision Status */
+.revision-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: var(--gruvbox-bg2);
+  border-radius: var(--md-sys-shape-corner-small);
+  border: 1px solid var(--gruvbox-bg3);
+  font-size: 12px;
+}
+
+.revision-status.overdue {
+  background-color: rgba(251, 73, 52, 0.1);
+  border-color: var(--gruvbox-red);
+}
+
+.revision-status.due-today {
+  background-color: rgba(250, 189, 47, 0.1);
+  border-color: var(--gruvbox-yellow);
+}
+
+.revision-label {
+  color: var(--gruvbox-fg3);
+  font-weight: 500;
+}
+
+.revision-date {
+  color: var(--gruvbox-fg1);
+  font-weight: 600;
+}
+
+.revision-status.overdue .revision-date {
+  color: var(--gruvbox-red);
+}
+
+.revision-status.due-today .revision-date {
+  color: var(--gruvbox-yellow);
 }
 
 @media (max-width: 480px) {

@@ -1,18 +1,57 @@
 import React, { useState } from 'react';
 import type { FlashcardData } from '../types/flashcard';
+import { getTimeUntilRevision } from '../utils/timeUtils';
 import './Flashcard.css';
 
 interface FlashcardProps {
   flashcard: FlashcardData;
   onUpdate: (id: string, front: string, back: string) => void;
   onDelete: (id: string) => void;
+  onMarkReviewed?: (id: string) => void;
 }
 
-const Flashcard: React.FC<FlashcardProps> = ({ flashcard, onUpdate, onDelete }) => {
+const Flashcard: React.FC<FlashcardProps> = ({ flashcard, onUpdate, onDelete, onMarkReviewed }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editFront, setEditFront] = useState(flashcard.front);
   const [editBack, setEditBack] = useState(flashcard.back);
+
+  const formatRevisionDate = (date: Date) => {
+    const timeUntil = getTimeUntilRevision(date);
+    
+    if (timeUntil.unit === 'overdue') {
+      return 'Overdue';
+    } else if (timeUntil.value === 0) {
+      return 'Now';
+    } else {
+      return `In ${timeUntil.value} ${timeUntil.unit}`;
+    }
+  };
+
+  const getRevisionStatus = () => {
+    if (!flashcard.nextRevision) {
+      console.log('No nextRevision for flashcard:', flashcard.id);
+      return null;
+    }
+    
+    const now = new Date();
+    const isOverdue = flashcard.nextRevision < now;
+    const isDueToday = flashcard.nextRevision.toDateString() === now.toDateString();
+    
+    console.log('Revision status for flashcard:', flashcard.id, {
+      nextRevision: flashcard.nextRevision,
+      now,
+      isOverdue,
+      isDueToday,
+      text: formatRevisionDate(flashcard.nextRevision)
+    });
+    
+    return {
+      text: formatRevisionDate(flashcard.nextRevision),
+      isOverdue,
+      isDueToday
+    };
+  };
 
   const handleSave = () => {
     if (editFront.trim() && editBack.trim()) {
@@ -77,7 +116,21 @@ const Flashcard: React.FC<FlashcardProps> = ({ flashcard, onUpdate, onDelete }) 
                 >
                   Delete
                 </button>
+                {onMarkReviewed && getRevisionStatus() && (
+                  <button 
+                    onClick={() => onMarkReviewed(flashcard.id)}
+                    className="review-btn"
+                  >
+                    Mark Reviewed
+                  </button>
+                )}
               </div>
+              {getRevisionStatus() && (
+                <div className={`revision-status ${getRevisionStatus()?.isOverdue ? 'overdue' : getRevisionStatus()?.isDueToday ? 'due-today' : ''}`}>
+                  <span className="revision-label">Next Review:</span>
+                  <span className="revision-date">{getRevisionStatus()?.text}</span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -123,7 +176,21 @@ const Flashcard: React.FC<FlashcardProps> = ({ flashcard, onUpdate, onDelete }) 
                 >
                   Delete
                 </button>
+                {onMarkReviewed && getRevisionStatus() && (
+                  <button 
+                    onClick={() => onMarkReviewed(flashcard.id)}
+                    className="review-btn"
+                  >
+                    Mark Reviewed
+                  </button>
+                )}
               </div>
+              {getRevisionStatus() && (
+                <div className={`revision-status ${getRevisionStatus()?.isOverdue ? 'overdue' : getRevisionStatus()?.isDueToday ? 'due-today' : ''}`}>
+                  <span className="revision-label">Next Review:</span>
+                  <span className="revision-date">{getRevisionStatus()?.text}</span>
+                </div>
+              )}
             </div>
           )}
         </div>

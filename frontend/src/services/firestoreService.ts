@@ -26,7 +26,12 @@ const convertDocToFlashcard = (doc: DocumentData): FlashcardData => {
     front: data.front,
     back: data.back,
     createdAt: data.createdAt?.toDate() || new Date(),
-    userId: data.userId
+    userId: data.userId,
+    nextRevision: data.nextRevision?.toDate() || undefined,
+    revisionInterval: data.revisionInterval || undefined,
+    revisionSettings: data.revisionSettings || undefined,
+    lastReviewed: data.lastReviewed?.toDate() || undefined,
+    reviewCount: data.reviewCount || 0
   };
 };
 
@@ -36,7 +41,8 @@ export const addFlashcard = async (flashcard: Omit<FlashcardData, 'id' | 'create
     const docRef = await addDoc(collection(db, FLASHCARDS_COLLECTION), {
       ...flashcard,
       userId,
-      createdAt: serverTimestamp()
+      createdAt: serverTimestamp(),
+      reviewCount: 0
     });
     return docRef.id;
   } catch (error) {
@@ -121,6 +127,73 @@ export const batchUpdateFlashcards = async (updates: Array<{ id: string; data: P
   } catch (error) {
     console.error('Error batch updating flashcards:', error);
     throw new Error('Failed to batch update flashcards');
+  }
+};
+
+// Update flashcard revision schedule
+export const updateFlashcardRevision = async (
+  flashcardId: string, 
+  revisionInterval: number,
+  nextRevision?: Date
+): Promise<void> => {
+  try {
+    const flashcardRef = doc(db, FLASHCARDS_COLLECTION, flashcardId);
+    const updateData: any = {
+      revisionInterval,
+      updatedAt: serverTimestamp()
+    };
+    
+    if (nextRevision) {
+      updateData.nextRevision = nextRevision;
+    }
+    
+    await updateDoc(flashcardRef, updateData);
+  } catch (error) {
+    console.error('Error updating flashcard revision:', error);
+    throw new Error('Failed to update flashcard revision');
+  }
+};
+
+// Update flashcard revision settings
+export const updateFlashcardRevisionSettings = async (
+  flashcardId: string,
+  revisionSettings: { interval: number; unit: string },
+  nextRevision?: Date
+): Promise<void> => {
+  try {
+    const flashcardRef = doc(db, FLASHCARDS_COLLECTION, flashcardId);
+    const updateData: any = {
+      revisionSettings,
+      updatedAt: serverTimestamp()
+    };
+    
+    if (nextRevision) {
+      updateData.nextRevision = nextRevision;
+    }
+    
+    await updateDoc(flashcardRef, updateData);
+  } catch (error) {
+    console.error('Error updating flashcard revision settings:', error);
+    throw new Error('Failed to update flashcard revision settings');
+  }
+};
+
+// Mark flashcard as reviewed
+export const markFlashcardReviewed = async (flashcardId: string, revisionInterval: number = 7): Promise<void> => {
+  try {
+    const flashcardRef = doc(db, FLASHCARDS_COLLECTION, flashcardId);
+    const now = new Date();
+    const nextRevision = new Date();
+    nextRevision.setDate(now.getDate() + revisionInterval);
+    
+    await updateDoc(flashcardRef, {
+      lastReviewed: now,
+      nextRevision: nextRevision,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error marking flashcard as reviewed:', error);
+    throw new Error('Failed to mark flashcard as reviewed');
   }
 };
 
