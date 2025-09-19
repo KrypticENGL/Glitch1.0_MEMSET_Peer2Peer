@@ -1,8 +1,10 @@
 .dashboard {
   min-height: 100vh;
-  background-color: var(--md-sys-color-surface);
+  background-color: var(--gruvbox-bg0);
   width: 100%;
   overflow-x: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .dashboard-header {
