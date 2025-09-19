@@ -5,6 +5,12 @@ import { auth } from '../firebase';
 import Flashcard from './Flashcard';
 import Modal from './Modal';
 import type { FlashcardData } from '../types/flashcard';
+import { 
+  addFlashcard, 
+  updateFlashcard, 
+  deleteFlashcard, 
+  getUserFlashcards 
+} from '../services/firestoreService';
 import './Dashboard.css';
 
 interface DashboardProps {
@@ -17,55 +23,99 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFront, setNewFront] = useState('');
   const [newBack, setNewBack] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load flashcards from localStorage on component mount
+  // Load flashcards from Firestore on component mount
   useEffect(() => {
-    const savedFlashcards = localStorage.getItem('flashcards');
-    if (savedFlashcards) {
+    const loadFlashcards = async () => {
+      if (!user?.uid) return;
+      
+      setLoading(true);
+      setError(null);
+      
       try {
-        const parsed = JSON.parse(savedFlashcards);
-        // Convert date strings back to Date objects
-        const flashcardsWithDates = parsed.map((card: any) => ({
-          ...card,
-          createdAt: new Date(card.createdAt)
-        }));
-        setFlashcards(flashcardsWithDates);
-      } catch (error) {
-        console.error('Error loading flashcards:', error);
+        const userFlashcards = await getUserFlashcards(user.uid);
+        setFlashcards(userFlashcards);
+      } catch (err) {
+        console.error('Error loading flashcards:', err);
+        setError('Failed to load flashcards. Please try again.');
+      } finally {
+        setLoading(false);
       }
-    }
-  }, []);
+    };
 
-  // Save flashcards to localStorage whenever flashcards change
-  useEffect(() => {
-    localStorage.setItem('flashcards', JSON.stringify(flashcards));
-  }, [flashcards]);
+    loadFlashcards();
+  }, [user?.uid]);
 
-  const handleAddFlashcard = () => {
-    if (newFront.trim() && newBack.trim()) {
+  const handleAddFlashcard = async () => {
+    if (!newFront.trim() || !newBack.trim() || !user?.uid) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const flashcardId = await addFlashcard(
+        {
+          front: newFront.trim(),
+          back: newBack.trim(),
+          userId: user.uid
+        },
+        user.uid
+      );
+      
       const newFlashcard: FlashcardData = {
-        id: Date.now().toString(),
+        id: flashcardId,
         front: newFront.trim(),
         back: newBack.trim(),
-        createdAt: new Date()
+        createdAt: new Date(),
+        userId: user.uid
       };
+      
       setFlashcards(prev => [newFlashcard, ...prev]);
       setNewFront('');
       setNewBack('');
       setIsModalOpen(false);
+    } catch (err) {
+      console.error('Error adding flashcard:', err);
+      setError('Failed to add flashcard. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleUpdateFlashcard = (id: string, front: string, back: string) => {
-    setFlashcards(prev => 
-      prev.map(card => 
-        card.id === id ? { ...card, front, back } : card
-      )
-    );
+  const handleUpdateFlashcard = async (id: string, front: string, back: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await updateFlashcard(id, { front, back });
+      setFlashcards(prev => 
+        prev.map(card => 
+          card.id === id ? { ...card, front, back } : card
+        )
+      );
+    } catch (err) {
+      console.error('Error updating flashcard:', err);
+      setError('Failed to update flashcard. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteFlashcard = (id: string) => {
-    setFlashcards(prev => prev.filter(card => card.id !== id));
+  const handleDeleteFlashcard = async (id: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await deleteFlashcard(id);
+      setFlashcards(prev => prev.filter(card => card.id !== id));
+    } catch (err) {
+      console.error('Error deleting flashcard:', err);
+      setError('Failed to delete flashcard. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -108,36 +158,56 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
             <button 
               onClick={handleOpenModal}
               className="add-flashcard-btn"
+              disabled={loading}
             >
-              + Add New Flashcard
+              {loading ? 'Loading...' : '+ Add New Flashcard'}
             </button>
           </div>
 
+          {error && (
+            <div className="error-banner">
+              <span>{error}</span>
+              <button onClick={() => setError(null)} className="error-close">
+                ×
+              </button>
+            </div>
+          )}
 
-          <div className="flashcards-grid">
-            {flashcards.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">📝</div>
-                <h3>No flashcards yet</h3>
-                <p>Create your first flashcard to get started!</p>
-                <button 
-                  onClick={handleOpenModal}
-                  className="create-first-btn"
-                >
-                  Create Your First Flashcard
-                </button>
-              </div>
-            ) : (
-              flashcards.map(flashcard => (
-                <Flashcard
-                  key={flashcard.id}
-                  flashcard={flashcard}
-                  onUpdate={handleUpdateFlashcard}
-                  onDelete={handleDeleteFlashcard}
-                />
-              ))
-            )}
-          </div>
+          {loading && flashcards.length === 0 && (
+            <div className="loading-state">
+              <div className="loading-spinner"></div>
+              <p>Loading your flashcards...</p>
+            </div>
+          )}
+
+
+          {!loading && (
+            <div className="flashcards-grid">
+              {flashcards.length === 0 ? (
+                <div className="empty-state">
+                  <div className="empty-icon">📝</div>
+                  <h3>No flashcards yet</h3>
+                  <p>Create your first flashcard to get started!</p>
+                  <button 
+                    onClick={handleOpenModal}
+                    className="create-first-btn"
+                    disabled={loading}
+                  >
+                    Create Your First Flashcard
+                  </button>
+                </div>
+              ) : (
+                flashcards.map(flashcard => (
+                  <Flashcard
+                    key={flashcard.id}
+                    flashcard={flashcard}
+                    onUpdate={handleUpdateFlashcard}
+                    onDelete={handleDeleteFlashcard}
+                  />
+                ))
+              )}
+            </div>
+          )}
         </div>
       </main>
 
