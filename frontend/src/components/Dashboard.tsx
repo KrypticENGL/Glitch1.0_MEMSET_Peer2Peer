@@ -3,6 +3,7 @@ import { signOut } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { auth } from '../firebase';
 import Flashcard from './Flashcard';
+import Modal from './Modal';
 import type { FlashcardData } from '../types/flashcard';
 import './Dashboard.css';
 
@@ -13,7 +14,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
   const [flashcards, setFlashcards] = useState<FlashcardData[]>([]);
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFront, setNewFront] = useState('');
   const [newBack, setNewBack] = useState('');
 
@@ -51,7 +52,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
       setFlashcards(prev => [newFlashcard, ...prev]);
       setNewFront('');
       setNewBack('');
-      setIsAddingNew(false);
+      setIsModalOpen(false);
     }
   };
 
@@ -76,10 +77,14 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
     }
   };
 
-  const cancelAddNew = () => {
+  const handleCloseModal = () => {
     setNewFront('');
     setNewBack('');
-    setIsAddingNew(false);
+    setIsModalOpen(false);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
 
   return (
@@ -101,55 +106,13 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
           <div className="flashcards-header">
             <h2>Your Flashcards ({flashcards.length})</h2>
             <button 
-              onClick={() => setIsAddingNew(true)}
+              onClick={handleOpenModal}
               className="add-flashcard-btn"
             >
               + Add New Flashcard
             </button>
           </div>
 
-          {isAddingNew && (
-            <div className="new-flashcard-form">
-              <h3>Create New Flashcard</h3>
-              <div className="form-group">
-                <label htmlFor="new-front">Front Side</label>
-                <textarea
-                  id="new-front"
-                  value={newFront}
-                  onChange={(e) => setNewFront(e.target.value)}
-                  placeholder="Enter the front side of your flashcard..."
-                  className="form-textarea"
-                  rows={3}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="new-back">Back Side</label>
-                <textarea
-                  id="new-back"
-                  value={newBack}
-                  onChange={(e) => setNewBack(e.target.value)}
-                  placeholder="Enter the back side of your flashcard..."
-                  className="form-textarea"
-                  rows={3}
-                />
-              </div>
-              <div className="form-actions">
-                <button 
-                  onClick={handleAddFlashcard}
-                  className="save-new-btn"
-                  disabled={!newFront.trim() || !newBack.trim()}
-                >
-                  Create Flashcard
-                </button>
-                <button 
-                  onClick={cancelAddNew}
-                  className="cancel-new-btn"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
 
           <div className="flashcards-grid">
             {flashcards.length === 0 ? (
@@ -158,7 +121,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
                 <h3>No flashcards yet</h3>
                 <p>Create your first flashcard to get started!</p>
                 <button 
-                  onClick={() => setIsAddingNew(true)}
+                  onClick={handleOpenModal}
                   className="create-first-btn"
                 >
                   Create Your First Flashcard
@@ -177,6 +140,53 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onSignOut }) => {
           </div>
         </div>
       </main>
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        title="Create New Flashcard"
+      >
+        <div className="modal-flashcard-form">
+          <div className="form-group">
+            <label htmlFor="new-front">Front Side</label>
+            <textarea
+              id="new-front"
+              value={newFront}
+              onChange={(e) => setNewFront(e.target.value)}
+              placeholder="Enter the front side of your flashcard..."
+              className="form-textarea"
+              rows={4}
+              autoFocus
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="new-back">Back Side</label>
+            <textarea
+              id="new-back"
+              value={newBack}
+              onChange={(e) => setNewBack(e.target.value)}
+              placeholder="Enter the back side of your flashcard..."
+              className="form-textarea"
+              rows={4}
+            />
+          </div>
+          <div className="form-actions">
+            <button 
+              onClick={handleAddFlashcard}
+              className="save-new-btn"
+              disabled={!newFront.trim() || !newBack.trim()}
+            >
+              Create Flashcard
+            </button>
+            <button 
+              onClick={handleCloseModal}
+              className="cancel-new-btn"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

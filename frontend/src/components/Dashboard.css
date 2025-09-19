@@ -1,6 +1,8 @@
 .dashboard {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .dashboard-header {
@@ -18,6 +20,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
+  padding: 0 20px;
 }
 
 .dashboard-header h1 {
@@ -61,6 +64,8 @@
 
 .dashboard-main {
   padding: 40px 20px;
+  width: 100%;
+  margin: 0;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -71,6 +76,8 @@
   padding: 30px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: none;
 }
 
 .flashcards-header {
@@ -198,9 +205,11 @@
 
 .flashcards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   margin-top: 20px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .empty-state {
@@ -250,6 +259,7 @@
   .header-content {
     flex-direction: column;
     text-align: center;
+    padding: 0 15px;
   }
   
   .dashboard-header h1 {
@@ -260,6 +270,14 @@
     justify-content: center;
   }
   
+  .dashboard-main {
+    padding: 20px 15px;
+  }
+  
+  .dashboard-content {
+    padding: 20px;
+  }
+  
   .flashcards-header {
     flex-direction: column;
     align-items: stretch;
@@ -268,7 +286,7 @@
   
   .flashcards-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 15px;
   }
   
   .form-actions {
@@ -283,14 +301,107 @@
 
 @media (max-width: 480px) {
   .dashboard-main {
-    padding: 20px 10px;
+    padding: 15px 10px;
   }
   
   .dashboard-content {
-    padding: 20px;
+    padding: 15px;
+  }
+  
+  .header-content {
+    padding: 0 10px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 1.8rem;
   }
   
   .new-flashcard-form {
-    padding: 20px;
+    padding: 15px;
+  }
+}
+
+/* Modal form styles */
+.modal-flashcard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-flashcard-form .form-group {
+  margin-bottom: 0;
+}
+
+.modal-flashcard-form .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.modal-flashcard-form .form-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.modal-flashcard-form .form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.modal-flashcard-form .save-new-btn,
+.modal-flashcard-form .cancel-new-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.modal-flashcard-form .save-new-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.modal-flashcard-form .save-new-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.modal-flashcard-form .save-new-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modal-flashcard-form .cancel-new-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.modal-flashcard-form .cancel-new-btn:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .modal-flashcard-form .form-actions {
+    justify-content: center;
+  }
+  
+  .modal-flashcard-form .save-new-btn,
+  .modal-flashcard-form .cancel-new-btn {
+    min-width: 120px;
   }
 }
