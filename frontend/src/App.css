@@ -1,3 +1,83 @@
+/* Material 3 Design Tokens */
+:root {
+  /* Primary Colors */
+  --md-sys-color-primary: #6750a4;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #eaddff;
+  --md-sys-color-on-primary-container: #21005d;
+  
+  /* Secondary Colors */
+  --md-sys-color-secondary: #625b71;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #e8def8;
+  --md-sys-color-on-secondary-container: #1d192b;
+  
+  /* Tertiary Colors */
+  --md-sys-color-tertiary: #7d5260;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #ffd8e4;
+  --md-sys-color-on-tertiary-container: #31111d;
+  
+  /* Error Colors */
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #410002;
+  
+  /* Surface Colors */
+  --md-sys-color-surface: #fffbfe;
+  --md-sys-color-on-surface: #1c1b1f;
+  --md-sys-color-surface-variant: #e7e0ec;
+  --md-sys-color-on-surface-variant: #49454f;
+  --md-sys-color-surface-container: #f3edf7;
+  --md-sys-color-surface-container-high: #ece6f0;
+  --md-sys-color-surface-container-highest: #e6e0e9;
+  
+  /* Outline Colors */
+  --md-sys-color-outline: #79747e;
+  --md-sys-color-outline-variant: #cac4d0;
+  
+  /* Shadow */
+  --md-sys-elevation-level1: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level2: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level3: 0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level4: 0px 2px 3px 0px rgba(0, 0, 0, 0.3), 0px 6px 10px 4px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level5: 0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15);
+  
+  /* Shape */
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  
+  /* Typography */
+  --md-sys-typescale-display-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-large-weight: 400;
+  --md-sys-typescale-display-large-line-height: 64px;
+  
+  --md-sys-typescale-headline-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-large-weight: 400;
+  --md-sys-typescale-headline-large-line-height: 40px;
+  
+  --md-sys-typescale-title-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-large-weight: 400;
+  --md-sys-typescale-title-large-line-height: 28px;
+  
+  --md-sys-typescale-body-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-body-large-size: 16px;
+  --md-sys-typescale-body-large-weight: 400;
+  --md-sys-typescale-body-large-line-height: 24px;
+  
+  --md-sys-typescale-label-large-font: 'Roboto', sans-serif;
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-large-weight: 500;
+  --md-sys-typescale-label-large-line-height: 20px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -7,6 +87,9 @@ html, body {
   padding: 0;
   width: 100%;
   overflow-x: hidden;
+  font-family: var(--md-sys-typescale-body-large-font);
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
 }
 
 #root {
@@ -24,15 +107,15 @@ html, body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
 }
 
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid white;
+  border: 4px solid var(--md-sys-color-primary-container);
+  border-top: 4px solid var(--md-sys-color-on-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
@@ -46,25 +129,27 @@ html, body {
 /* App styles */
 .app {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: var(--md-sys-color-surface);
 }
 
 .app-header {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background-color: var(--md-sys-color-surface-container);
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .app-header h1 {
-  color: white;
+  color: var(--md-sys-color-on-surface);
   margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
+  font-family: var(--md-sys-typescale-headline-large-font);
+  font-size: var(--md-sys-typescale-headline-large-size);
+  font-weight: var(--md-sys-typescale-headline-large-weight);
+  line-height: var(--md-sys-typescale-headline-large-line-height);
 }
 
 .user-info {
@@ -75,25 +160,33 @@ html, body {
 }
 
 .user-info p {
-  color: white;
+  color: var(--md-sys-color-on-surface);
   margin: 0;
-  font-size: 1.1rem;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
 }
 
 .sign-out-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
+  border: none;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: var(--md-sys-shape-corner-large);
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  transition: all 0.2s ease;
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .sign-out-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--md-sys-color-error);
+  box-shadow: var(--md-sys-elevation-level2);
+  transform: translateY(-1px);
 }
 
 .app-main {
@@ -105,9 +198,9 @@ html, body {
 }
 
 .welcome-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background-color: var(--md-sys-color-surface-container);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  box-shadow: var(--md-sys-elevation-level3);
   padding: 40px;
   max-width: 500px;
   width: 100%;
@@ -115,21 +208,26 @@ html, body {
 }
 
 .welcome-card h2 {
-  color: #333;
+  color: var(--md-sys-color-on-surface);
   margin-bottom: 20px;
-  font-size: 2rem;
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+  line-height: var(--md-sys-typescale-title-large-line-height);
 }
 
 .welcome-card p {
-  color: #666;
+  color: var(--md-sys-color-on-surface-variant);
   margin-bottom: 30px;
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
 }
 
 .user-details {
-  background: #f8f9fa;
-  border-radius: 8px;
+  background-color: var(--md-sys-color-surface-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
   padding: 20px;
   text-align: left;
   margin-top: 20px;
@@ -137,12 +235,15 @@ html, body {
 
 .user-details p {
   margin: 10px 0;
-  color: #333;
-  font-size: 0.95rem;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
 }
 
 .user-details strong {
-  color: #555;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 @media (max-width: 768px) {
