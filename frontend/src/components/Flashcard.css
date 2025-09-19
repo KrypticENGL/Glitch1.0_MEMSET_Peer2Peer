@@ -1,0 +1,203 @@
+.flashcard {
+  width: 100%;
+  max-width: 400px;
+  height: 250px;
+  perspective: 1000px;
+  margin: 20px auto;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.flashcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.flashcard-back {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card-text {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.flip-btn,
+.edit-btn,
+.delete-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 70px;
+}
+
+.flip-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.flip-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.edit-btn {
+  background: rgba(255, 193, 7, 0.8);
+  color: #333;
+}
+
+.edit-btn:hover {
+  background: rgba(255, 193, 7, 1);
+  transform: translateY(-2px);
+}
+
+.delete-btn {
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: rgba(220, 53, 69, 1);
+  transform: translateY(-2px);
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 15px;
+}
+
+.edit-textarea {
+  flex-grow: 1;
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 16px;
+  resize: none;
+  font-family: inherit;
+}
+
+.edit-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.edit-textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.save-btn {
+  background: rgba(40, 167, 69, 0.9);
+  color: white;
+}
+
+.save-btn:hover {
+  background: rgba(40, 167, 69, 1);
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  background: rgba(108, 117, 125, 0.9);
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: rgba(108, 117, 125, 1);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .flashcard {
+    max-width: 350px;
+    height: 220px;
+  }
+  
+  .card-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .flip-btn,
+  .edit-btn,
+  .delete-btn {
+    width: 100%;
+    max-width: 120px;
+  }
+}
